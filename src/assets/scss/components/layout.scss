@@ -1,0 +1,24 @@
+.container {
+  height: 100%;
+  display: flex;
+  .left-slide {
+    height: 100%;
+    width: 200px;
+    background-color: #D3DCE6;
+  }
+  .main {
+    flex: 1;
+    height: 100%;
+    background-color: #E9EEF3;
+    display: flex;
+    flex-direction: column;
+    .header {
+      height: 60px;
+      background: #ddd
+    }
+    .content {
+      flex: 1;
+      background: rgb(175, 174, 174)
+    }
+  }
+}

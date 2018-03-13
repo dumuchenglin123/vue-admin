@@ -6,7 +6,8 @@ import homeComponent from 'pages/home'
 import noPageComponent from 'pages/error/404'
 //login
 import loginComponent from 'pages/login'
-
+//view page warp component
+import viewPageComponent from 'pages/App'
 
 Vue.use(Router)
 
@@ -21,7 +22,7 @@ const routes = [{
 }, {
   path: '/',
   // redirect: '/home',
-  component: homeComponent,
+    component: viewPageComponent,
 }]
 export default new Router({
   routes,

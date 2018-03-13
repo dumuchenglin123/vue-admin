@@ -1,7 +1,9 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <section class="body-wrap">
+    <transition name="fade" mode="out-in">
+      <router-view/>
+    </transition>
+  </section>
 </template>
 
 <script>
@@ -10,14 +12,21 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<style lang="scss" type="text/scss" rel="stylesheet/scss">
+@import 'assets/scss/components/base';
+@import 'assets/scss/components/layout';
+
+.body-wrap {
   height: 100%;
-  margin-top: 60px;
 }
+
+.fade-enter-active,
+  .fade-leave-active {
+    transition: all .2s ease;
+  }
+
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0;
+  }
 </style>
