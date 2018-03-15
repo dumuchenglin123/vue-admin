@@ -11,8 +11,18 @@
       </a>
     </div>
     <div class="header-right">
-      <a class="user">用户</a>
-      <div class="userimg">sfddsf</div>
+      <a class="user">{{ user }}</a>
+
+      <el-dropdown trigger="click">
+        <span class="el-dropdown-link ">
+          <div class="userimg"></div>
+        </span>
+        <el-dropdown-menu slot="dropdown" class="dropdown-menu">
+          <el-dropdown-item>个人信息</el-dropdown-item>
+          <el-dropdown-item>设置</el-dropdown-item>
+          <el-dropdown-item>安全退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </section>
 </template>
@@ -20,17 +30,18 @@
 <script>
 export default {
   name: "HeaderTop",
-  data () {
+  data() {
     return {
       hamActive: true,
-      title: '后台管理系统'
-    }
+      title: "后台管理系统",
+      user: "测试"
+    };
   },
-  props: ['isShow'],
+  props: ["isShow"],
   methods: {
-    actived () {
+    actived() {
       this.hamActive = !this.hamActive;
-      this.$emit("toggleSide", this.hamActive)
+      this.$emit("toggleSide", this.hamActive);
     }
   }
 };
@@ -40,6 +51,7 @@ export default {
 .header {
   position: relative;
   display: flex;
+  color: #6f6f6f;
   .header-middle {
     text-align: center;
     .header-title {
@@ -78,11 +90,27 @@ export default {
   margin-right: 20px;
   height: 100%;
   .user {
+    padding: 10px;
     height: 100%;
     line-height: 50px;
   }
   .userimg {
     display: inline-block;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+  }
+}
+
+.dropdown-menu {
+  top: 40px !important;
+  width: 200px;
+
+  .popper__arrow {
+    display: none;
   }
 }
 

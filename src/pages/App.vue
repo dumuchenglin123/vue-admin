@@ -1,17 +1,21 @@
 <template>
   <div class="container">
-    <transition name="slide">
-      <div class="left-slide" v-show="isShow">dsfsafda</div>
+    <transition name="slide-fade" mode="out-in">
+      <left-slide v-show="isShow" />
     </transition>
     <div class="main">
       <header-top class="header" :isShow = 'isShow' @toggleSide = 'showSide($event)'></header-top>
-      <!-- <div class="content"></div> -->
+      <div class="content"></div>
     </div>
+    <svg-sprite></svg-sprite>
   </div>
 </template>
 
 <script>
   import headerTop from 'components/HeaderTop'
+  import SvgSprite from 'components/logo/SvgSprite'
+  import LeftSlide from 'components/LeftSlide'
+
   export default {
     name: 'home',
     data () {
@@ -20,7 +24,9 @@
       }
     },
     components: {
-      headerTop
+      headerTop,
+      SvgSprite,
+      LeftSlide
     },
     methods: {
       showSide (isShow) {        // 侧边栏展开函数
@@ -32,23 +38,16 @@
 
 <style lang="scss">
   .slide-fade-enter-active {
-    transition: all 13s ease;
+    transition: all 0.38s ease;
   }
   .slide-fade-leave-active {
-    transition: all 18s ease;
+    transition: all 0.38s ease;
   }
   .slide-fade-enter, .slide-fade-leave-to {
-    transform: translateX(-10px);
-    opacity: 1;
-    transition: all 18s;
+    transform: translateX(-200px);
+    opacity: 0;
+    transition: all 0.38s;
   }
 
-  .container .header {
-    background: tomato;
-  }
-  .container .main {
-    background: transparent;
-    // transition: all 8s ease;
-  }
 
 </style>
