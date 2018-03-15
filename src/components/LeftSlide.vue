@@ -77,8 +77,8 @@ export default {
 <style lang="scss">
 .el-menu-vertical-demo {
   height: 100%;
+  width: 212px;
   border: none;
-
 }
 .left-slide {
   display: flex;
@@ -91,6 +91,34 @@ export default {
   .side-menu {
     flex: 1;
     overflow: auto;
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      background-color: transparent;
+    }
+    /*定义滚动条的轨道，内阴影及圆角*/
+
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color:transparent;
+    }
+    /*定义滑块，内阴影及圆角*/
+
+    &::-webkit-scrollbar-thumb {
+      /*width: 10px;*/
+      height: 8px;
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: rgba(228, 227, 227, 0.4)
+    }
+    /*滑块效果*/
+
+    &::-webkit-scrollbar-thumb:hover {
+      border-radius: 5px;
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      background: rgb(207, 207, 207);
+    }
   }
 }
 </style>
