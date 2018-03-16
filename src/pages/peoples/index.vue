@@ -1,7 +1,5 @@
 <template>
-  <h1>
-    home
-  </h1>
+  <h1>人员管理</h1>
 </template>
 
 <script>

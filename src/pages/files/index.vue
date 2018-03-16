@@ -1,7 +1,5 @@
 <template>
-  <h1>
-    home
-  </h1>
+  <h1>文件管理</h1>
 </template>
 
 <script>

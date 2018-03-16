@@ -1,16 +1,21 @@
 .container {
+  position: relative;
   height: 100%;
-  display: flex;
   .left-slide {
+    position: absolute;
+    left: 0;
+    top: 0;
     height: 100%;
     width: 220px;
     background-color: #39435C;
 
   }
   .main {
-    flex: 1;
+    position: absolute;
+    left: 220px;
+    top: 0;
+    right: 0;
     height: 100%;
-    //background-color: #E9EEF3;
     display: flex;
     flex-direction: column;
     .header {

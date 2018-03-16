@@ -15,6 +15,7 @@ export default {
 <style lang="scss" type="text/scss" rel="stylesheet/scss">
 @import 'assets/scss/components/base';
 @import 'assets/scss/components/layout';
+@import "assets/iconfont";
 
 .body-wrap {
   height: 100%;

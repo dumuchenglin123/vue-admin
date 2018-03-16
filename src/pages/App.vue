@@ -5,7 +5,7 @@
     </transition>
     <div class="main">
       <header-top class="header" :isShow = 'isShow' @toggleSide = 'showSide($event)'></header-top>
-      <div class="content"></div>
+      <router-view class="content" />
     </div>
     <svg-sprite></svg-sprite>
   </div>

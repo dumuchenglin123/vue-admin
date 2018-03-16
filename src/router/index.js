@@ -9,6 +9,18 @@ import loginComponent from 'pages/login'
 //view page warp component
 import viewPageComponent from 'pages/App'
 
+import userComponent from 'pages/users'
+
+import authorComponent from 'pages/authority'
+
+import peopleMangeComponent from 'pages/peoples'
+
+import filesManageComponent from 'pages/files'
+
+import menuManageComponent from 'pages/menuM'
+
+import logsManageComponent from 'pages/logsM'
+
 Vue.use(Router)
 
 const routes = [{
@@ -20,11 +32,34 @@ const routes = [{
   name: 'login',
   component: loginComponent
 }, {
-  path: '/',
-  // redirect: '/home',
-    component: viewPageComponent,
+  path: '/admin',
+  name: 'admin',
+  component: viewPageComponent,
+  children: [{
+    path: '/',
+    component: homeComponent
+  }, {
+    path: 'user',
+    component: userComponent
+  }, {
+    path: 'authority',
+    name: 'authority',
+    component: authorComponent
+  }, {
+    path: 'peopleManage',
+    component: peopleMangeComponent
+  }, {
+    path: 'filesManage',
+    component: filesManageComponent
+  }, {
+    path: 'menuManage',
+    component: menuManageComponent
+  }, {
+    path: 'logsManage',
+    component: logsManageComponent
+  }]
 }]
 export default new Router({
   routes,
-  mode: 'hash'
+  mode: 'history'
 })
