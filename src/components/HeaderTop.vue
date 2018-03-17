@@ -62,7 +62,6 @@ export default {
   }
 }
 .navicon-con {
-  // display: inline-block;
   margin-left: 10px;
   height: 100%;
   line-height: 50px;
@@ -80,13 +79,11 @@ export default {
 }
 
 .header-middle {
-  // float: left;
   flex: 1;
   display: inline-block;
 }
 
 .header-right {
-  // float: right;
   margin-right: 20px;
   height: 100%;
   .user {
