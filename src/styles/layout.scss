@@ -1,6 +1,7 @@
 .container {
   position: relative;
   height: 100%;
+  // 侧边栏样式
   .left-slide {
     position: absolute;
     left: 0;
@@ -10,7 +11,8 @@
     background-color: #39435C;
 
   }
-  .main {
+  // 右边容器样式
+  .main-container {
     position: absolute;
     left: 220px;
     top: 0;

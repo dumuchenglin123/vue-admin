@@ -6,9 +6,11 @@
       </a>
     </div>
     <div class="header-middle">
-      <a class="header-title ">
-        {{ title }}
-      </a>
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="admin-breadcrumb">
+          <transition-group name="breadcrumb">
+            <el-breadcrumb-item v-for="breItem in BreadcrumbList" :key="breItem.path" :to="{ path: breItem.path }"> {{ breItem.meta.title }} </el-breadcrumb-item>
+          </transition-group>
+        </el-breadcrumb>
     </div>
     <div class="header-right">
       <a class="user">{{ user }}</a>
@@ -28,36 +30,58 @@
 </template>
 
 <script>
+import {  } from "vuex";
 export default {
-  name: "HeaderTop",
+  name: "NavBar",
   data() {
     return {
       hamActive: true,
       title: "后台管理系统",
-      user: "测试"
+      user: "测试",
+      BreadcrumbList: []
     };
   },
   props: ["isShow"],
+  mounted() {
+    this.getBreadcrumb();
+  },
+  watch: {
+    $route() {
+      this.getBreadcrumb();
+    }
+  },
   methods: {
     actived() {
       this.hamActive = !this.hamActive;
       this.$emit("toggleSide", this.hamActive);
+    },
+    getBreadcrumb() {
+      let BreadcrumbList = this.$route.matched;
+      console.log(BreadcrumbList);
+      this.BreadcrumbList = BreadcrumbList;
+
+      // this.BreadcrumbList = this.$route.matched.map((item, index) => {
+      //   return item.meta.title;
+      // });
+      // console.log(this.BreadcrumbList,222)
     }
   }
 };
 </script>
 
-<style lang="scss" type="text/scss" rel="stylesheet/scss">
+<style lang="scss">
 .header {
   position: relative;
   display: flex;
   color: #6f6f6f;
   .header-middle {
-    text-align: center;
-    .header-title {
-      display: inline-block;
+    padding: 0 20px;
+    height: 100%;
+    line-height: 50px;
+    .admin-breadcrumb {
       height: 100%;
       line-height: 50px;
+      font-family: "Hiragino Sans GB";
     }
   }
 }

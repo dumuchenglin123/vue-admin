@@ -12,22 +12,11 @@ export default {
 }
 </script>
 
-<style lang="scss" type="text/scss" rel="stylesheet/scss">
-@import 'assets/scss/components/base';
-@import 'assets/scss/components/layout';
+<style lang="scss">
+@import 'styles/base';
+@import 'styles/layout';
+@import "styles/transition";
 @import "assets/iconfont";
 
-.body-wrap {
-  height: 100%;
-}
 
-.fade-enter-active,
-  .fade-leave-active {
-    transition: all .2s ease;
-  }
-
-  .fade-enter,
-  .fade-leave-active {
-    opacity: 0;
-  }
 </style>

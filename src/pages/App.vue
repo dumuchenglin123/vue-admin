@@ -1,23 +1,21 @@
 <template>
   <div class="container">
-    <transition name="slide-fade" mode="out-in">
-      <left-slide v-show="isShow" />
-    </transition>
-    <div class="main" :class="{ 'expand': !isShow }">
-      <header-top class="header" :isShow = 'isShow' @toggleSide = 'showSide($event)'></header-top>
-      <transition name="fade" mode="out-in">
-        <router-view class="content" />
-      </transition>
+    <left-slide v-show="sideBarShow" />
+    <div class="main-container" :class="{ 'hideSidebar': !sideBarShow }">
+      <navbar class="header" :isShow = 'sideBarShow' @toggleSide = 'showSide($event)'></navbar>
+      <app-main></app-main>
     </div>
     <svg-sprite></svg-sprite>
   </div>
 </template>
 
 <script>
-  import headerTop from 'components/HeaderTop'
+  import Navbar from 'components/NavBar'
   import SvgSprite from 'components/logo/SvgSprite'
   import LeftSlide from 'components/LeftSlide'
-
+  import AppMain from 'components/AppMain'
+  import {mapState} from 'vuex'
+  
   export default {
     name: 'home',
     data () {
@@ -26,34 +24,30 @@
       }
     },
     components: {
-      headerTop,
+      Navbar,
       SvgSprite,
-      LeftSlide
+      LeftSlide,
+      AppMain
     },
     methods: {
       showSide (isShow) {        // 侧边栏展开函数
+        console.log(this,6666)
         this.isShow = isShow
       }
-    }
+    },
+    computed: {
+      ...mapState({
+        sideBarShow: state => state.app.sideBarShow      
+      })
+      }
   }
 </script>
 
 <style lang="scss">
-  .slide-fade-enter-active {
-    transition: all 1.2s ease;
-  }
-  .slide-fade-leave-active {
-    transition: all 1.2s ease;
-  }
-  .slide-fade-enter, .slide-fade-leave-to {
-    transform: translateX(-200px);
-    opacity: 0;
-    transition: all 1.2s;
-  }
 
-  .main {
+  .main-container {
       transition: all 1.2s;
-    &.expand {
+    &.hideSidebar {
       left: 0;
     }
   }

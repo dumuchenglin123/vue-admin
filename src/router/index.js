@@ -21,6 +21,14 @@ import menuManageComponent from 'pages/menuM'
 
 import logsManageComponent from 'pages/logsM'
 
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css' // progress bar style
+
+NProgress.configure({
+  showSpinner: false
+}) // NProgress Configuration
+
+
 Vue.use(Router)
 
 const routes = [{
@@ -30,36 +38,94 @@ const routes = [{
 }, {
   path: '/login',
   name: 'login',
-  component: loginComponent
+  component: loginComponent,
+  meta: {
+    title: '登录'
+  }
 }, {
   path: '/admin',
-  name: 'admin',
   component: viewPageComponent,
+  meta: {
+    title: '首页'
+  },
   children: [{
     path: '/',
+    name: 'admin',
     component: homeComponent
   }, {
     path: 'user',
-    component: userComponent
+    name: 'user',
+    component: userComponent,
+    meta: {
+      title: '用户管理'
+    }
   }, {
     path: 'authority',
     name: 'authority',
-    component: authorComponent
+    component: authorComponent,
+    meta: {
+      title: '权限管理'
+    },
+    children: [{
+      path: 'test1'
+    }, {
+      path: 'test2',
+      meta: {
+        title: 'test2管理'
+      }
+    }, {
+      path: 'test3',
+      meta: {
+        title: 'test3管理'
+      }
+    }]
   }, {
     path: 'peopleManage',
-    component: peopleMangeComponent
+    name: 'peopleManage',
+    component: peopleMangeComponent,
+    meta: {
+      title: '人员管理'
+    }
   }, {
     path: 'filesManage',
-    component: filesManageComponent
+    name: 'filesManage',
+    component: filesManageComponent,
+    meta: {
+      title: '文件管理'
+    }
   }, {
     path: 'menuManage',
-    component: menuManageComponent
+    name: 'menuManage',
+    component: menuManageComponent,
+    meta: {
+      title: '菜单管理'
+    }
   }, {
     path: 'logsManage',
-    component: logsManageComponent
+    name: 'logsManage',
+    component: logsManageComponent,
+    meta: {
+      title: '日志管理'
+    }
   }]
 }]
-export default new Router({
+
+const router = new Router({
   routes,
-  mode: 'history'
+  mode: 'history',
+  scrollBehavior: (to, from, savedPosition) => (savedPosition || {
+    x: 0,
+    y: 0
+  }),
 })
+
+router.beforeEach((to, from, next) => {
+  NProgress.start() // start progress bar
+  next();
+})
+
+router.afterEach(() => {
+  NProgress.done() // finish progress bar
+})
+
+export default router

@@ -39,7 +39,8 @@ module.exports = {
       'asset': '@/asset',
       'util': '@/util',
       'pages': '@/pages',
-      'components': '@/components'
+      'components': '@/components',
+      'styles': '@/styles'
     }
   },
   module: {
