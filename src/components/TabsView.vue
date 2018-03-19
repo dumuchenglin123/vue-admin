@@ -1,17 +1,39 @@
 <template>
   <div class="tags-container" @wheel.prevent="handleScroll">
     <ul class="tagsList" :style="{left: left + 'px'}">
-      <li class="tag-item item-select">首页 <i class="el-icon-close"></i></li>
-      <li class="tag-item">人员管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">人员管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">材料管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">相关管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">人员管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">材料管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">相关管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">人员管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">材料管理 <i class="el-icon-close"></i></li>
-      <li class="tag-item">相关管理 <i class="el-icon-close"></i></li>
+      <li class="tag-item item-select">首页
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">人员管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">人员管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">材料管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">相关管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">人员管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">材料管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">相关管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">人员管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">材料管理
+        <i class="el-icon-close"></i>
+      </li>
+      <li class="tag-item">相关管理
+        <i class="el-icon-close"></i>
+      </li>
     </ul>
   </div>
 </template>
@@ -19,13 +41,13 @@
 <script>
 export default {
   name: "TabsView",
-  data () {
+  data() {
     return {
       left: 0
-    }
+    };
   },
   methods: {
-    handleScroll (evt) {
+    handleScroll(evt) {
       const eventDelta = evt.wheelDelta;
       this.left += eventDelta;
     }
@@ -47,20 +69,28 @@ export default {
     .tag-item {
       display: inline-block;
       padding: 0 8px;
-      transition: all .3s;
+      transition: all 0.3s;
       height: 24px;
       line-height: 24px;
       font-size: 13px;
       letter-spacing: 2px;
       cursor: pointer;
       border: 1px solid #e0e0e0;
+
+      .el-icon-close:hover {
+        border-radius: 100%;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        background: #ccc;
+      }
       &:hover {
-        background: #389aff;
+        background: rgba(66, 185, 131, 0.7);
         color: #fff;
       }
       &.item-select {
         background: #42b983;
-         color: #fff;
+        color: #fff;
       }
     }
   }

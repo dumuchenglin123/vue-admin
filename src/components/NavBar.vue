@@ -129,9 +129,9 @@ export default {
   top: 40px !important;
   width: 200px;
 
-  .popper__arrow {
-    display: none;
-  }
+  // .popper__arrow {
+  //   display: none;
+  // }
 }
 
 </style>
