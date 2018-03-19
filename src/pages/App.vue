@@ -2,7 +2,8 @@
   <div class="container">
     <left-slide v-show="sideBarShow" />
     <div class="main-container" :class="{ 'hideSidebar': !sideBarShow }">
-      <navbar class="header" :isShow = 'sideBarShow' @toggleSide = 'showSide($event)'></navbar>
+      <navbar></navbar>
+      <tabs-view></tabs-view>
       <app-main></app-main>
     </div>
     <svg-sprite></svg-sprite>
@@ -13,9 +14,10 @@
   import Navbar from 'components/NavBar'
   import SvgSprite from 'components/logo/SvgSprite'
   import LeftSlide from 'components/LeftSlide'
+  import TabsView from 'components/TabsView'
   import AppMain from 'components/AppMain'
-  import {mapState} from 'vuex'
-  
+  import {mapGetters} from 'vuex'
+
   export default {
     name: 'home',
     data () {
@@ -24,29 +26,30 @@
       }
     },
     components: {
-      Navbar,
       SvgSprite,
       LeftSlide,
+      Navbar,
+      TabsView,
       AppMain
     },
     methods: {
       showSide (isShow) {        // 侧边栏展开函数
-        console.log(this,6666)
         this.isShow = isShow
       }
     },
     computed: {
-      ...mapState({
-        sideBarShow: state => state.app.sideBarShow      
-      })
-      }
+      ...mapGetters(['sideBarShow']),
+    },
+    methods: {
+
+    }
   }
 </script>
 
 <style lang="scss">
 
   .main-container {
-      transition: all 1.2s;
+      transition: all .8s;
     &.hideSidebar {
       left: 0;
     }

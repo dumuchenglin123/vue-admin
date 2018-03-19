@@ -1,7 +1,7 @@
 <template>
   <section class="header">
     <div class="navicon-con">
-      <a class="hamburger" :class="{'is-active':hamActive}" @click="actived()">
+      <a class="hamburger" :class="{'is-active':sideBarShow}" @click="toggleSideBar">
         <i class="iconfont">&#xe604;</i>
       </a>
     </div>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {  } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "NavBar",
   data() {
@@ -50,14 +50,13 @@ export default {
       this.getBreadcrumb();
     }
   },
+  computed: {
+    ...mapGetters(['sideBarShow'])
+  },
   methods: {
-    actived() {
-      this.hamActive = !this.hamActive;
-      this.$emit("toggleSide", this.hamActive);
-    },
+    ...mapActions(['toggleSideBar']),
     getBreadcrumb() {
       let BreadcrumbList = this.$route.matched;
-      console.log(BreadcrumbList);
       this.BreadcrumbList = BreadcrumbList;
 
       // this.BreadcrumbList = this.$route.matched.map((item, index) => {
