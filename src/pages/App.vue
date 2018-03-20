@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <left-slide v-show="sideBarShow" />
-    <div class="main-container" :class="{ 'hideSidebar': !sideBarShow }">
+    <div class="right-container" :class="{ 'hideSidebar': !sideBarShow }">
       <navbar></navbar>
       <tabs-view></tabs-view>
       <app-main></app-main>
@@ -48,7 +48,7 @@
 
 <style lang="scss">
 
-  .main-container {
+  .right-container {
       transition: all 0.9s;
     &.hideSidebar {
       left: 0;

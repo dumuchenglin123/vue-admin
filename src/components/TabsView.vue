@@ -3,11 +3,11 @@
     <div class="tabs-wrapper" ref="tabsWrapper" @wheel.prevent="handleScroll">
       <ul class="tabsList" ref="tabsList" :style="{left: left + 'px'}">
         <router-link class="tab-item" v-for=" tab in tabViews" :class=" isActive(tab)? 'item-select':'' " :key="tab.path" :to="tab.path" tag="li" @click="isActive" @contextmenu.prevent.native="showMenu(tab, $event)"> {{ tab.title }}
-          <i class="el-icon-close" @click.prevent.stop = 'closeSelectedTab(tab)'></i>
+          <i class="el-icon-close" @click.prevent.stop='closeSelectedTab(tab)'></i>
         </router-link>
       </ul>
     </div>
-    <ul class="tabs-menu" v-show="visiable" :style="{left: menuLeft + 'px', top: top + 'px'}">
+    <ul class="tabs-menu" v-show="visible" :style="{left: menuLeft + 'px', top: top + 'px'}">
       <li class="menu-item">关闭自己</li>
       <li class="menu-item">关闭其他</li>
       <li class="menu-item">关闭所有</li>
@@ -25,20 +25,27 @@ export default {
       left: 0,
       menuLeft: 0,
       top: 0,
-      visiable: false
+      visible: false
     };
   },
   watch: {
     $route() {
       const route = this.generateRoute(this.$route);
       this.addVisitedViews(route);
+    },
+    visible (value) {
+      if (value) {
+        document.body.addEventListener('click', this.closeMenu)
+      } else {
+        document.body.removeEventListener('click', this.closeMenu)
+      }
     }
   },
   computed: {
     ...mapGetters(["tabViews"])
   },
   methods: {
-    ...mapActions(["addVisitedViews"]),
+    ...mapActions(["addVisitedViews", "delVisitedViews"]),
     handleScroll(evt) {
       const eventDelta = evt.wheelDelta;
       const $containerWidth = this.$refs.tabsWrapper.offsetWidth;
@@ -68,22 +75,24 @@ export default {
       return route;
     },
     closeSelectedTab(tab) {
-      this.$store.dispatch("delVisitedViews", tab).then(views => {
+      this.delVisitedViews(tab).then(views => {
         if (this.isActive(tab)) {
           const latestView = views.slice(-1)[0];
           if (latestView) {
             this.$router.push(latestView.path);
           } else {
-            this.$router.push("/");
+            this.$router.push("/admin");
           }
         }
       });
     },
-    showMenu (tab, evt) {
-      console.log(tab ,evt ,8998)
-      this.menuLeft = evt.clientX;
+    showMenu(tab, evt) {
+      this.menuLeft = evt.clientX - 220;
       this.top = evt.clientY;
-      this.visiable = true;
+      this.visible = true;
+    },
+    closeMenu() {
+      this.visible = false
     }
   }
 };
@@ -135,10 +144,24 @@ export default {
   }
 
   .tabs-menu {
-      position: absolute;
-      width: 200px;
-      background: #fff;
+    position: absolute;
+    z-index: 22222;
+    padding: 5px 0;
+    width: 100px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 1px 2px 5px #909399;
+    .menu-item {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #606266;
+      cursor: pointer;
+      outline: 0;
+      &:hover {
+        background-color: #ecf5ff;
+        color: #66b1ff;
+      }
     }
+  }
 }
-
 </style>
