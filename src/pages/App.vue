@@ -49,7 +49,7 @@
 <style lang="scss">
 
   .main-container {
-      transition: all .8s;
+      transition: all 0.9s;
     &.hideSidebar {
       left: 0;
     }
