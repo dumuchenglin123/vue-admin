@@ -20,6 +20,20 @@ const tabsView = {
           break
         }
       }
+    },
+    DEL_OTHER_VIEWS: (state, view) => {
+      // if (view.title !== '首页') {
+      //   state.visitedViews = [{
+      //     path: '/admin',
+      //     title: '首页'
+      //   }]
+        state.visitedViews = [view];
+      // } else {
+      //   state.visitedViews = []
+      // }
+    },
+    DEL_ALL_VIEWS: (state) => {
+      state.visitedViews = [];
     }
   },
   actions: {
@@ -30,6 +44,18 @@ const tabsView = {
       return new Promise((resolve) => {
         commit('DEL_VISITED_VIEWS', view)
         resolve([...state.visitedViews])
+      })
+    },
+    delOtherViews ({ commit }, view) {
+      return new Promise( resolve => {
+        commit('DEL_OTHER_VIEWS', view)
+        resolve(view)
+      })
+    },
+    delAllViews ({ commit }) {
+      return new Promise(resolve => {
+        commit('DEL_ALL_VIEWS');
+        resolve();
       })
     }
   }

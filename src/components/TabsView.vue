@@ -8,9 +8,9 @@
       </ul>
     </div>
     <ul class="tabs-menu" v-show="visible" :style="{left: menuLeft + 'px', top: top + 'px'}">
-      <li class="menu-item">关闭自己</li>
-      <li class="menu-item">关闭其他</li>
-      <li class="menu-item">关闭所有</li>
+      <li class="menu-item" @click="closeSelectedTab(selectTab)">关闭自己</li>
+      <li class="menu-item" @click="closeOtherTabs()">关闭其他</li>
+      <li class="menu-item" @click="closeAllTabs()">关闭所有</li>
     </ul>
   </section>
 </template>
@@ -25,7 +25,8 @@ export default {
       left: 0,
       menuLeft: 0,
       top: 0,
-      visible: false
+      visible: false,
+      selectTab:{}
     };
   },
   watch: {
@@ -45,7 +46,7 @@ export default {
     ...mapGetters(["tabViews"])
   },
   methods: {
-    ...mapActions(["addVisitedViews", "delVisitedViews"]),
+    ...mapActions(["addVisitedViews", "delVisitedViews", "delOtherViews", "delAllViews"]),
     handleScroll(evt) {
       const eventDelta = evt.wheelDelta;
       const $containerWidth = this.$refs.tabsWrapper.offsetWidth;
@@ -75,6 +76,9 @@ export default {
       return route;
     },
     closeSelectedTab(tab) {
+      if (tab.path === '/admin') {
+          return false;
+      }
       this.delVisitedViews(tab).then(views => {
         if (this.isActive(tab)) {
           const latestView = views.slice(-1)[0];
@@ -86,10 +90,24 @@ export default {
         }
       });
     },
+    closeOtherTabs() {
+      this.delOtherViews(this.selectTab).then( tab => {
+        if (tab.title !== '首页') {
+          this.$router.push(tab.path)
+        }
+      })
+    },
+    closeAllTabs() {
+      this.delAllViews().then(() => {
+        this.$router.push('/admin');
+        this.isActive(this.tabViews)
+      });
+    },
     showMenu(tab, evt) {
       this.menuLeft = evt.clientX - 220;
       this.top = evt.clientY;
       this.visible = true;
+      this.selectTab = tab
     },
     closeMenu() {
       this.visible = false
