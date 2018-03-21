@@ -92,9 +92,7 @@ export default {
     },
     closeOtherTabs() {
       this.delOtherViews(this.selectTab).then( tab => {
-        if (tab.title !== '首页') {
           this.$router.push(tab.path)
-        }
       })
     },
     closeAllTabs() {
@@ -118,12 +116,13 @@ export default {
 
 <style lang="scss">
 .tabs-container {
+  height: 38px;
   .tabs-wrapper {
     position: relative;
-    height: 36px;
-    line-height: 36px;
+    height: 34px;
+    line-height: 34px;
     overflow: hidden;
-    box-shadow: 1px 2px 5px -1px #e4e3e3;
+    box-shadow: 1px 2px 7px -1px #e4e3e3;
     .tabsList {
       position: absolute;
       height: 100%;

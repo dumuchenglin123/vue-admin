@@ -22,15 +22,15 @@ const tabsView = {
       }
     },
     DEL_OTHER_VIEWS: (state, view) => {
-      // if (view.title !== '首页') {
-      //   state.visitedViews = [{
-      //     path: '/admin',
-      //     title: '首页'
-      //   }]
-        state.visitedViews = [view];
-      // } else {
-      //   state.visitedViews = []
-      // }
+      if (view.title !== '首页') {
+        state.visitedViews = [{
+          path: '/admin',
+          title: '首页'
+        }]
+      } else {
+        state.visitedViews = [];
+      }
+      state.visitedViews.push(view);
     },
     DEL_ALL_VIEWS: (state) => {
       state.visitedViews = [];
