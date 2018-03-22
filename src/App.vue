@@ -16,6 +16,7 @@ export default {
 @import 'styles/base';
 @import 'styles/layout';
 @import "styles/transition";
+@import "styles/element-ui";
 @import "assets/iconfont";
 
 

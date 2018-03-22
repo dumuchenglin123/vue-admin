@@ -27,9 +27,15 @@
 
     }
     .content {
+      display: flex;
       flex: 1;
+      flex-direction: column;
       padding: 10px;
       background: #fff;
+      .L-grid {
+        flex: 1;
+        margin-top: 10px;
+      }
 
     }
   }

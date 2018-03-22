@@ -26,19 +26,23 @@ export default {
       menuLeft: 0,
       top: 0,
       visible: false,
-      selectTab:{}
+      selectTab: {}
     };
+  },
+  mounted() {
+    const route = this.generateRoute(this.$route);
+    this.addVisitedViews(route);
   },
   watch: {
     $route() {
       const route = this.generateRoute(this.$route);
       this.addVisitedViews(route);
     },
-    visible (value) {
+    visible(value) {
       if (value) {
-        document.body.addEventListener('click', this.closeMenu)
+        document.body.addEventListener("click", this.closeMenu);
       } else {
-        document.body.removeEventListener('click', this.closeMenu)
+        document.body.removeEventListener("click", this.closeMenu);
       }
     }
   },
@@ -46,7 +50,12 @@ export default {
     ...mapGetters(["tabViews"])
   },
   methods: {
-    ...mapActions(["addVisitedViews", "delVisitedViews", "delOtherViews", "delAllViews"]),
+    ...mapActions([
+      "addVisitedViews",
+      "delVisitedViews",
+      "delOtherViews",
+      "delAllViews"
+    ]),
     handleScroll(evt) {
       const eventDelta = evt.wheelDelta;
       const $containerWidth = this.$refs.tabsWrapper.offsetWidth;
@@ -76,8 +85,8 @@ export default {
       return route;
     },
     closeSelectedTab(tab) {
-      if (tab.path === '/admin') {
-          return false;
+      if (tab.path === "/admin") {
+        return false;
       }
       this.delVisitedViews(tab).then(views => {
         if (this.isActive(tab)) {
@@ -91,24 +100,24 @@ export default {
       });
     },
     closeOtherTabs() {
-      this.delOtherViews(this.selectTab).then( tab => {
-          this.$router.push(tab.path)
-      })
+      this.delOtherViews(this.selectTab).then(tab => {
+        this.$router.push(tab.path);
+      });
     },
     closeAllTabs() {
       this.delAllViews().then(() => {
-        this.$router.push('/admin');
-        this.isActive(this.tabViews)
+        this.$router.push("/admin");
+        this.isActive(this.tabViews);
       });
     },
     showMenu(tab, evt) {
       this.menuLeft = evt.clientX - 220;
       this.top = evt.clientY;
       this.visible = true;
-      this.selectTab = tab
+      this.selectTab = tab;
     },
     closeMenu() {
-      this.visible = false
+      this.visible = false;
     }
   }
 };
