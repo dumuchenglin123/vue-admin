@@ -10,7 +10,7 @@
           </el-col>
           <el-col :span="7">
             <el-form-item label="文件菜单：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading" size="medium">
+              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
@@ -18,7 +18,7 @@
           </el-col>
           <el-col :span="7">
             <el-form-item label="文件模块：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading" size="medium">
+              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
@@ -28,10 +28,10 @@
         <el-row>
           <el-col :span="5">
             <el-form-item>
-              <el-button type="primary" icon="el-icon-search" size="small">查询</el-button>
+              <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" icon="el-icon-plus" size="small">添加</el-button>
+              <el-button type="primary" icon="el-icon-plus" size="small" @click="openDialog()">添加</el-button>
             </el-form-item>
           </el-col>
           <!-- <el-col :span="4">
@@ -45,56 +45,42 @@
       </el-form>
     </div>
     <div class="L-grid">
-      <el-table :data="tableData" stripe border style="height: 100%" :header-cell-style="{textAlign: 'center'}">
-        <el-table-column prop="date" label="文件名称" width="180">
+      <el-table :data="tableData" stripe border height='100%' v-loading="tabLoading" :header-cell-style="{textAlign: 'center'}">
+        <el-table-column prop="filename" label="文件名称" width="180">
         </el-table-column>
-        <el-table-column prop="name" label="文件描述" width="180">
+        <el-table-column prop="description" label="文件描述" width="180">
         </el-table-column>
-        <el-table-column prop="address" label="所属文件菜单" width="180">
+        <!-- <el-table-column prop="fileMenu" label="所属文件菜单" width="180">
+        </el-table-column> -->
+        <el-table-column prop="enable" label="是否可用" width="180">
+          <template slot-scope="scope">
+            <span v-if="scope.row.enable !== true">可用</span>
+            <span v-else>不可用</span>
+          </template>
         </el-table-column>
-        <el-table-column prop="address" label="是否可用" width="180">
-        </el-table-column>
-        <el-table-column prop="address" label="所属文件模块" width="180">
-        </el-table-column>
+        <!-- <el-table-column prop="module" label="所属文件模块" width="180">
+        </el-table-column> -->
         <el-table-column label="操作" align="center" min-width="180">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope)">编辑</el-button>
+            <el-button size="mini" type="primary" @click="openDialog(scope)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <update-add-dailog :isShow='showDialog' @toggleShow="changeState"></update-add-dailog>
+    <update-add-dailog :isShow='showDialog' :operation='operate' @toggleShow="changeState"></update-add-dailog>
   </section>
 </template>
 
 <script>
 import UpdateAddDailog from "./update-add";
+import { fetchList, addData } from "@/api/filesManage";
+
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
+      tableData: null,
+      tabParam: {},
       formData: {
         name: null
       },
@@ -114,9 +100,11 @@ export default {
       ],
       typeOptions: [],
       typeValue: [],
-      loading: false,
+      tabLoading: false,
+      inputLoading: false,
       showDialog: false,
-      radio8: '1'
+      operate: "",
+      radio8: "1"
     };
   },
   components: {
@@ -125,9 +113,9 @@ export default {
   methods: {
     remoteMethod(query) {
       if (query !== "") {
-        this.loading = true;
+        this.inputLoading = true;
         setTimeout(() => {
-          this.loading = false;
+          this.inputLoading = false;
           this.typeOptions = this.remoteOptions.filter(item => {
             return item.text.toLowerCase().indexOf(query.toLowerCase()) > -1;
           });
@@ -136,12 +124,25 @@ export default {
         this.typeOptions = this.remoteOptions;
       }
     },
-    handleEdit(scope) {
+    openDialog(scope) {
+      if (!scope) {
+        this.operate = "add";
+      } else {
+        this.operate = "update";
+      }
       this.showDialog = true;
     },
     handleDelete() {},
     changeState() {
       this.showDialog = false;
+    },
+    queryList() {  // 查询表格数据
+      this.tabLoading = true;
+      fetchList(this.tabParam).then(response => {
+        this.tableData = response.data.data;
+        // this.total = response.data.total;
+        this.tabLoading = false;
+      });
     }
   }
 };
