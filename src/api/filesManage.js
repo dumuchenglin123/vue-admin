@@ -9,6 +9,7 @@ export function fetchList(query) {
 }
 
 export function addData(data) {
+  console.log(data,4555555)
   return request({
     url: '/files/add',
     method: 'post',

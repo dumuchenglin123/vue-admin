@@ -126,6 +126,7 @@ export default {
 <style lang="scss">
 .tabs-container {
   height: 38px;
+  background: #fff;
   .tabs-wrapper {
     position: relative;
     height: 34px;

@@ -114,7 +114,10 @@ export default {
     },
     submitDailog() {
       if (this.operation === "add") {
-        console.log(this.form);
+        addData(this.form).then(res => {
+          console.log(res,34343);
+          
+        })
       } else {
       }
       this.closeDialog();

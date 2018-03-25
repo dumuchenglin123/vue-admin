@@ -3,37 +3,37 @@
     <div class="L-selects">
       <el-form label-width="85px" :inline="true" :model="formData">
         <el-row>
-          <el-col :span="7">
+          <!-- <el-col :span="7"> -->
             <el-form-item label="文件名称：">
               <el-input v-model="formData.name" size="medium"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="7">
+          <!-- </el-col> -->
+          <!-- <el-col :span="7"> -->
             <el-form-item label="文件菜单：">
               <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="7">
+          <!-- </el-col> -->
+          <!-- <el-col :span="7"> -->
             <el-form-item label="文件模块：">
               <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          <!-- </el-col> -->
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <!-- <el-col :span="5"> -->
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" icon="el-icon-plus" size="small" @click="openDialog()">添加</el-button>
             </el-form-item>
-          </el-col>
+          <!-- </el-col> -->
           <!-- <el-col :span="4">
             <el-form-item>
               <el-radio v-model="radio8" label="1" border size="small">可用</el-radio>

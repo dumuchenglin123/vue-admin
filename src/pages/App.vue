@@ -48,11 +48,4 @@
 
 <style lang="scss">
 
-  .right-container {
-      transition: all 0.9s;
-    &.hideSidebar {
-      left: 0;
-    }
-  }
-
 </style>
