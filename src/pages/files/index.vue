@@ -5,27 +5,27 @@
         <el-row>
           <!-- <el-col :span="7"> -->
             <el-form-item label="文件名称：">
-              <el-input v-model="formData.name" size="medium"></el-input>
+              <el-input v-model="formData.filename" size="medium"></el-input>
             </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="7"> -->
-            <el-form-item label="文件菜单：">
+            <!-- <el-form-item label="文件菜单：">
               <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
           <!-- </el-col> -->
           <!-- <el-col :span="7"> -->
-            <el-form-item label="文件模块：">
+            <!-- <el-form-item label="文件模块：">
               <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
           <!-- </el-col> -->
-        </el-row>
-        <el-row>
+        <!-- </el-row>
+        <el-row> -->
           <!-- <el-col :span="5"> -->
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
@@ -54,12 +54,12 @@
         </el-table-column> -->
         <el-table-column prop="enable" label="是否可用" width="180">
           <template slot-scope="scope">
-            <span v-if="scope.row.enable !== true">可用</span>
+            <span v-if="scope.row.enable != 0">可用</span>
             <span v-else>不可用</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="module" label="所属文件模块" width="180">
-        </el-table-column> -->
+        <el-table-column prop="module" label="文件上传日期" width="180">
+        </el-table-column>
         <el-table-column label="操作" align="center" min-width="180">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="openDialog(scope)">编辑</el-button>
@@ -68,6 +68,17 @@
         </el-table-column>
       </el-table>
     </div>
+    <el-pagination
+      class="L-pag"
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="100"
+      layout="sizes, prev, pager, next"
+      :total="1000"
+      >
+    </el-pagination>
     <update-add-dailog :isShow='showDialog' :operation='operate' @toggleShow="changeState"></update-add-dailog>
   </section>
 </template>
@@ -79,10 +90,17 @@ import { fetchList, addData } from "@/api/filesManage";
 export default {
   data() {
     return {
-      tableData: null,
+      tableData: [],
       tabParam: {},
       formData: {
         name: null
+      },
+      listQuery: {
+        curPage: 1,
+        pageSize: 20,
+        importance: undefined,
+        title: undefined,
+        type: undefined,
       },
       remoteOptions: [
         {
@@ -132,13 +150,21 @@ export default {
       }
       this.showDialog = true;
     },
+    handleSizeChange (val) {
+      this.listQuery.curPage = val
+      this.queryList()
+    },
+    handleCurrentChange () {
+      this.listQuery.page = val
+      this.queryList()
+    },
     handleDelete() {},
     changeState() {
       this.showDialog = false;
     },
     queryList() {  // 查询表格数据
       this.tabLoading = true;
-      fetchList(this.tabParam).then(response => {
+      fetchList(this.formData).then(response => {
         this.tableData = response.data.data;
         // this.total = response.data.total;
         this.tabLoading = false;
@@ -150,5 +176,8 @@ export default {
 
 <style lang="scss">
 .user-manage {
+}
+.L-pag {
+  margin-top: 10px;
 }
 </style>
