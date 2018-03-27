@@ -1,12 +1,14 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+
 const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
+  baseURL: "http://192.168.1.127:3000/manage", // api的base_url
   timeout: 5000 // request timeout
 });
 
 // request interceptor
 service.interceptors.request.use(config => {
+  console.log('request', config)
   // Do something before request is sent
   return config;
 }, error => {

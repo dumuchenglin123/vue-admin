@@ -21,6 +21,8 @@ import menuManageComponent from 'pages/menuM'
 
 import logsManageComponent from 'pages/logsM'
 
+import sysManageComponent from 'pages/sysM'
+
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 
@@ -107,7 +109,15 @@ const routes = [{
     meta: {
       title: '日志管理'
     }
+  }, {
+    path: 'sysManage',
+    name: 'sysManage',
+    component: sysManageComponent,
+    meta: {
+      title: '系统管理'
+    }
   }]
+
 }]
 
 const router = new Router({

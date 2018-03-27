@@ -1,16 +1,16 @@
 <template>
   <section class="user-manage">
     <div class="L-selects">
-      <el-form label-width="85px" :inline="true" :model="formData">
+      <el-form label-width="85px" :inline="true" :model="listQuery">
         <el-row>
           <!-- <el-col :span="7"> -->
             <el-form-item label="文件名称：">
-              <el-input v-model="formData.filename" size="medium"></el-input>
+              <el-input v-model="listQuery.filename" size="medium"></el-input>
             </el-form-item>
           <!-- </el-col> -->
           <!-- <el-col :span="7"> -->
             <!-- <el-form-item label="文件菜单：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
+              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
@@ -18,7 +18,7 @@
           <!-- </el-col> -->
           <!-- <el-col :span="7"> -->
             <!-- <el-form-item label="文件模块：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="remoteMethod" :loading="inputLoading" size="medium">
+              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
@@ -92,15 +92,13 @@ export default {
     return {
       tableData: [],
       tabParam: {},
-      formData: {
-        name: null
-      },
       listQuery: {
-        curPage: 1,
-        pageSize: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
+        filename: '',
+        // curPage: 1,
+        // pageSize: 20,
+        // importance: undefined,
+        // title: undefined,
+        // type: undefined,
       },
       remoteOptions: [
         {
@@ -121,7 +119,7 @@ export default {
       tabLoading: false,
       inputLoading: false,
       showDialog: false,
-      operate: "",
+      operate: "", // 决定弹出窗口是添加也还是修改页的变量
       radio8: "1"
     };
   },
@@ -129,7 +127,7 @@ export default {
     UpdateAddDailog
   },
   methods: {
-    remoteMethod(query) {
+    selectGetData(query) {
       if (query !== "") {
         this.inputLoading = true;
         setTimeout(() => {
@@ -150,12 +148,16 @@ export default {
       }
       this.showDialog = true;
     },
+    //  分页器 设置每页发送多少数据的方法
     handleSizeChange (val) {
-      this.listQuery.curPage = val
+      console.log(val,34343)
+      this.listQuery.pageSize = val
       this.queryList()
     },
-    handleCurrentChange () {
-      this.listQuery.page = val
+    // 分页器 设置当前第几页刷新
+    handleCurrentChange (val) {
+      console.log(val,322222)
+      this.listQuery.curPage = val
       this.queryList()
     },
     handleDelete() {},
@@ -164,7 +166,7 @@ export default {
     },
     queryList() {  // 查询表格数据
       this.tabLoading = true;
-      fetchList(this.formData).then(response => {
+      fetchList(this.listQuery).then(response => {
         this.tableData = response.data.data;
         // this.total = response.data.total;
         this.tabLoading = false;

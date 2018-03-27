@@ -38,7 +38,7 @@
       </div>
     </div>
   </transition>
-  
+
 </template>
 
 <script>
@@ -91,6 +91,10 @@
           {
             title: "日志管理",
             path: "/admin/logsManage",
+            unicode: "&#xe62f;"
+          },{
+            title: "系统管理",
+            path: "/admin/sysManage",
             unicode: "&#xe62f;"
           }
         ]

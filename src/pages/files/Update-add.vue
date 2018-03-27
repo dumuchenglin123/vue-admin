@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="isShow" :before-close='closeDialog' @open="openDialog" width="40%" :close-on-click-modal='false'>
+  <el-dialog :visible.sync="isShow" :before-close='closeDialog' width="40%" :close-on-click-modal='false'>
     <span slot="title">{{title}}</span>
     <el-form :model="form" v-loading="formDataloading" ref="Form" :rules="rules" status-icon>
       <el-form-item label="文件名称：" :label-width="formLabelWidth" class="form-item" prop="name">
@@ -113,11 +113,9 @@ export default {
       }
     }
   },
-  mounted() {
-
-  },
   methods: {
     closeDialog() {
+      this.$refs.Form.resetFields();
       this.$emit("toggleShow");
     },
     submitUpload() {
@@ -125,9 +123,9 @@ export default {
     },
     submitDailog() {
       // 提交前先验证
-      if (!this.submitForm()) {
-        return false;
-      }
+      // if (!this.submitForm()) {
+      //   return false;
+      // }
       this.formDataloading = true;
       if (this.operation === "add") {
         const newData = this.form;
@@ -152,13 +150,13 @@ export default {
     },
     submitForm() {
       // 检测文件是否提交待上传
-      if (!this.fileList.length) {
-        this.$message({
-            message: "上传文件为空",
-            type: "error"
-          });
-          return false;
-      }
+      // if (!this.fileList.length) {
+      //   this.$message({
+      //       message: "上传文件为空",
+      //       type: "error"
+      //     });
+      //     return false;
+      // }
       this.$refs.Form.validate((valid) => {
         if (valid) {
           alert('submit!');
@@ -173,9 +171,6 @@ export default {
     },
     filesUnloaded () {
       console.log(arguments,5555)
-    },
-    openDialog() {
-      this.$refs.Form.resetFields();
     }
   }
 };
