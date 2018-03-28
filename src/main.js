@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import 'babel-polyfill'
 import axios from 'axios'
+import VueMoment from 'vue-moment'
 
 import 'element-ui/lib/theme-chalk/index.css'
 //导入element组件
@@ -13,6 +14,8 @@ import ElementUI from 'element-ui'
 
 //使用element-ui
 Vue.use(ElementUI)
+
+Vue.use(VueMoment)
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios

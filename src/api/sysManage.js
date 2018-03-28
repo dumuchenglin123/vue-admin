@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function queryData(query) {
   return request({
     url: '/sys',
     method: 'get',

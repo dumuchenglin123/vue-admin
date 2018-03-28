@@ -75,7 +75,7 @@
         <el-table-column label="操作" align="center" min-width="180">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="openDialog(scope)">上传</el-button>
-            <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+            <!-- <el-button size="mini" type="danger" @click="deleteData(scope.$index, scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -97,7 +97,7 @@
 
 <script>
 // import UpdateAddDailog from "./update-add";
-import { fetchList, addData } from "@/api/filesManage";
+import { queryData, addData } from "@/api/filesManage";
 
 export default {
   data() {
@@ -235,17 +235,17 @@ export default {
       this.listQuery.curPage = val
       this.queryList()
     },
-    handleDelete() {},
-    changeState() {
-      this.showDialog = false;
-    },
+    deleteData() {},
     queryList() {  // 查询表格数据
       this.tabLoading = true;
-      fetchList().then(response => {
+      queryData().then(response => {
         this.tableData = response.data.data;
         // this.total = response.data.total;
         this.tabLoading = false;
       });
+    },
+    changeState() {
+      this.showDialog = false;
     }
   }
 };

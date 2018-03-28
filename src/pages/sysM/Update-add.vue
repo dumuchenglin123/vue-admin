@@ -6,7 +6,7 @@
         <el-input v-model="form.name" auto-complete="off" size="medium" :disabled='disabled'></el-input>
       </el-form-item>
       <el-form-item label="系统描述：" :label-width="formLabelWidth" style="width: 350px;height: 68px" prop="descript">
-        <el-input type="textarea" v-model="form.descript"  size="medium"></el-input>
+        <el-input type="textarea" v-model="form.descript" size="medium"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { fetchList, addData, updateData } from "@/api/sysManage";
+import { queryData, addData, updateData } from "@/api/sysManage";
 
 export default {
   name: "Update-add",
@@ -30,8 +30,8 @@ export default {
       rules: {
         name: { required: true, message: "请输入文件名称", trigger: "blur" },
         descript: [
-          { required: true, message: '请输入描述信息' },
-          { min: 6, max: 30, message: '长度在 6 到 30 个字符' }
+          { required: true, message: "请输入描述信息",trigger: "blur" },
+          { min: 6, max: 30, message: "长度在 6 到 30 个字符" }
         ]
       }
     };
@@ -44,7 +44,7 @@ export default {
         return "修改页";
       }
     },
-    disabled () {
+    disabled() {
       if (this.operation === "add") {
         return false;
       } else {
@@ -52,80 +52,54 @@ export default {
       }
     }
   },
-  mounted() {
-
-    // this.form = {...this.form, ...this}
-  },
   methods: {
-    dialogOpened () {
+    dialogOpened() {
       if (this.rowData) {
-        this.form = { ...this.form, ...this.rowData.row}
+        this.form = { ...this.form, ...this.rowData.row };
       } else {
-        this.form = {}
+        this.form = {};
       }
     },
     dialogClosed() {
       // 关闭前重置表单
-      this.$refs.Form.resetFields();
       this.$emit("toggleShow");
       this.$parent.rowData = null;
-    },
-    submitUpload() {
-      this.$refs.upload.submit();
+      this.$refs.Form.resetFields();
     },
     submitDailog() {
       this.formDataloading = true;
       // 提交前先验证
       this.submitForm();
-      const newData = {...this.form};
+      const newData = { ...this.form };
 
-      if (this.formDataloading ) {
+      if (this.formDataloading) {
         if (this.operation === "add") {
-
-          addData(newData).then(res => {
-
-            // 父组件表格添加数据
-            this.$parent.tableData.push(newData);
-
-
-            this.formDataloading = false;
-
-            this.$message({
-              message: "数据添加完毕",
-              type: "success"
-            });
-
-            setTimeout(() => {
+          addData(newData)
+            .then(res => {
+              this.formDataloading = false;
+              this.$parent.tableData.push(newData);
               this.dialogClosed();
-            }, 1000);
-
-          }).catch(error => {
-             this.formDataloading = false;
-          });
+            })
+            .catch(error => {
+              this.formDataloading = false;
+            });
         } else {
-          updateData( newData._id,newData).then(res => {
-            let index = this.rowData.$index;
-            this.$parent.tableData[index] = newData;
 
-            this.formDataloading = false;
-
-            this.$message({
-              message: "数据修改完毕",
-              type: "success"
-            });
-
-            setTimeout(() => {
+          updateData(newData._id, newData)
+            .then(res => {
+              let index = this.rowData.$index;
+              this.$parent.$set(this.$parent.tableData, index, newData);
+              this.formDataloading = false;
               this.dialogClosed();
-            }, 1000);
-          }).catch(error => {
-             this.formDataloading = false;
-          });
-          this.dialogClosed();
+            })
+            .catch(error => {
+              this.formDataloading = false;
+            });
         }
-      };
+      }
     },
     submitForm() {
-      const validate = this.$refs.Form.validate((valid) => {
+      this.$refs.Form.validate(valid => {
         if (!valid) {
           this.formDataloading = false;
         }

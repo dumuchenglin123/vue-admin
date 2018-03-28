@@ -8,7 +8,7 @@ const service = axios.create({
 
 // request interceptor
 service.interceptors.request.use(config => {
-  console.log('request', config)
+  console.log(config, 'request')
   // Do something before request is sent
   return config;
 }, error => {
@@ -20,8 +20,12 @@ service.interceptors.request.use(config => {
 // respone interceptor
 service.interceptors.response.use(
   response => {
-    console.log(response,'success')
-    return response;
+    console.log(response,'response')
+    Message({
+      message: response.data.message,
+      type: "success"
+    });
+    return response.data;
   },
   error => {
     console.log('err' + error,'error2')// for debug
