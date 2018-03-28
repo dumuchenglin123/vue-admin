@@ -27,7 +27,7 @@
         <el-row> -->
           <!-- <el-col :span="5"> -->
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="small" >查询</el-button>
+            <el-button type="primary" icon="el-icon-search" size="small">查询</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-plus" size="small" @click="openDialog()">添加</el-button>
@@ -56,10 +56,11 @@
         </el-table-column>
         <!-- <el-table-column prop="fileMenu" label="所属文件菜单" width="180">
         </el-table-column> -->
-        <el-table-column prop="enable" label="是否可用" width="180">
+        <el-table-column prop="enable" label="是否可用" width="180" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.enable != 0">可用</span>
-            <span v-else>不可用</span>
+            <!-- <span v-if="scope.row.enable != 0">可用</span>
+            <span v-else>不可用</span> -->
+            <el-checkbox v-model="scope.row.enable" :true-label="1" :false-label="0" :disabled="!scope.row.edit"></el-checkbox>
           </template>
         </el-table-column>
         <el-table-column prop="createDate" label="文件上传日期" width="180">
@@ -69,8 +70,9 @@
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="180">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.edit" type="success" size="small"  icon="el-icon-circle-check-outline">Ok</el-button>
-            <el-button v-else type="primary" @click='scope.row.edit=!scope.row.edit' size="small" icon="el-icon-edit">Edit</el-button>
+            <el-button v-if="scope.row.edit" type="success" size="small" @click="rowEdit(scope.row)" icon="el-icon-circle-check-outline">Ok</el-button>
+            <el-button v-else type="primary" @click='scope.row.edit=!scope.row.edit; tabBtnDisabled=true' :disabled="tabBtnDisabled" size="small" icon="el-icon-edit">Edit</el-button>
+            <el-button size="mini" type="danger" @click="deleteData(scope.$index, scope.row)">删除</el-button>
           </template>
           <!-- <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="openDialog(scope)">编辑</el-button>
@@ -87,33 +89,39 @@
 
 <script>
 import UpdateAddDailog from "./update-add";
-import { queryData, DelData } from "@/api/filesManage";
+import { queryData, updateData, DelData } from "@/api/filesManage";
 
 export default {
   data() {
     return {
       uploading: false,
-      tableData: [{
-        name: '1111',
-        descript: '33333',
-        enable: 1,
-        edit: false
-      },{
-        name: '1111',
-        descript: '33333',
-        enable: 1,
-        edit: false
-      },{
-        name: '1111',
-        descript: '33333',
-        enable: 1,
-        edit: false
-      },{
-        name: '1111',
-        descript: '33333',
-        enable: 1,
-        edit: false
-      }],
+      tabBtnDisabled: false,
+      tableData: [
+        {
+          name: "1111",
+          descript: "33333",
+          enable: 0,
+          edit: false
+        },
+        {
+          name: "1111",
+          descript: "33333",
+          enable: 1,
+          edit: false
+        },
+        {
+          name: "1111",
+          descript: "33333",
+          enable: 0,
+          edit: false
+        },
+        {
+          name: "1111",
+          descript: "33333",
+          enable: 1,
+          edit: false
+        }
+      ],
       tabParam: {},
       listQuery: {
         filename: ""
@@ -151,6 +159,20 @@ export default {
     UpdateAddDailog
   },
   methods: {
+    rowEdit(row) {
+      row.edit = false;
+      this.tabBtnDisabled = false;
+
+      const newData = { ...this.form };
+
+      updateData(newData._id, newData);
+
+
+      // this.$message({
+      //   message: 'The title has been edited',
+      //   type: 'success'
+      // })
+    },
     selectGetData(query) {
       if (query !== "") {
         this.inputLoading = true;
