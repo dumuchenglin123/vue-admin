@@ -26,13 +26,13 @@
         </el-table-column>
       </el-table>
     </div>
-    <update-add-dailog v-bind="{isShow: showDialog, operation: operate, rowData: rowData}" @toggleShow="changeState"></update-add-dailog>
+    <update-add-dailog v-bind="{isShow: showDialog, operation: operate, rowData: rowData}" @toggleShow="changeDialogState"></update-add-dailog>
   </section>
 </template>
 
 <script>
 import UpdateAddDailog from "./update-add";
-import { queryData, DelData } from "@/api/sysManage";
+import { querySysData } from "@/api/sysManage";
 
 export default {
   data() {
@@ -68,7 +68,7 @@ export default {
     // 查询表格数据
     queryList() {
       this.tabLoading = true;
-      queryData()
+      querySysData()
         .then(response => {
           this.tableData = response.data;
           this.tabLoading = false;
@@ -88,7 +88,7 @@ export default {
           this.tabLoading = false;
         });
     },
-    changeState() {
+    changeDialogState() {
       this.showDialog = false;
     }
   }

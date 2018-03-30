@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { queryData, addData, updateData } from "@/api/filesManage";
+import { addFileData, updateFileData } from "@/api/filesManage";
 
 export default {
   name: "Update-add",
@@ -124,7 +124,7 @@ export default {
 
       if (this.formDataloading) {
         if (this.operation === "add") {
-          addData(newData)
+          addFileData(newData)
             .then(res => {
               this.formDataloading = false;
               this.$parent.tableData.push(res.data);
@@ -135,7 +135,7 @@ export default {
             });
         } else {
 
-          updateData(newData._id, newData)
+          updateFileData(newData._id, newData)
             .then(res => {
               let index = this.rowData.$index;
               this.$parent.$set(this.$parent.tableData, index, newData);

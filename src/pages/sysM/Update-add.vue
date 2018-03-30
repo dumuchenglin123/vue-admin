@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { queryData, addData, updateData } from "@/api/sysManage";
+import { addSysData, updateSysData } from "@/api/sysManage";
 
 export default {
   name: "Update-add",
@@ -74,7 +74,7 @@ export default {
 
       if (this.formDataloading) {
         if (this.operation === "add") {
-          addData(newData)
+          addSysData(newData)
             .then(res => {
               this.formDataloading = false;
               this.$parent.tableData.push(newData);
@@ -85,7 +85,7 @@ export default {
             });
         } else {
 
-          updateData(newData._id, newData)
+          updateSysData(newData._id, newData)
             .then(res => {
               let index = this.rowData.$index;
               this.$parent.$set(this.$parent.tableData, index, newData);

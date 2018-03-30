@@ -4,7 +4,7 @@
       <el-form label-width="85px" :inline="true" :model="listQuery">
         <el-row>
             <el-form-item label="菜单名称：">
-              <el-input v-model="listQuery.filename" size="medium"></el-input>
+              <el-input v-model="listQuery.name" size="medium"></el-input>
             </el-form-item>
             <el-form-item label="所属模块：">
               <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
@@ -16,16 +16,8 @@
               <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" icon="el-icon-plus" size="small" @click="openDialog">添加</el-button>
+              <el-button type="primary" icon="el-icon-plus" size="small" @click="openDialog()">添加</el-button>
             </el-form-item>
-          <!-- </el-col> -->
-          <!-- <el-col :span="4">
-            <el-form-item>
-              <el-radio v-model="radio8" label="1" border size="small">可用</el-radio>
-              <el-radio v-model="radio8" label="2" border size="small">不可用</el-radio>
-            </el-form-item>
-          </el-col> -->
-
         </el-row>
       </el-form>
     </div>
@@ -33,34 +25,36 @@
       <el-table :data="tableData" stripe border height='100%' v-loading="tabLoading" :header-cell-style="{textAlign: 'center'}">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-table :data="props.row.fileColumns" stripe border :header-cell-style="{textAlign: 'center'}">
-              <el-table-column prop="filename" label="文件名称" width="140">
+            <el-table :data="props.row.file" stripe border :header-cell-style="{textAlign: 'center'}">
+              <el-table-column prop="name" label="文件名称" width="140">
               </el-table-column>
-              <el-table-column prop="filedesc" label="文件描述" width="120">
+              <el-table-column prop="descript" label="文件描述" width="120">
               </el-table-column>
-              <el-table-column prop="fileEnable" label="是否可用" width="140">
+              <el-table-column prop="createDate" label="文件上传日期" width="180">
+                <template slot-scope="scope">
+                  <span>{{scope.row.createDate| moment("YYYY-MM-DD HH:mm:ss")}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="enable" label="是否可用" >
               </el-table-column>
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column prop="menuName" label="菜单名称" width="180">
+        <el-table-column prop="name" label="菜单名称" width="180">
         </el-table-column>
-        <el-table-column prop="desc" label="菜单描述" width="180">
+        <el-table-column prop="descript" label="菜单描述" width="180">
         </el-table-column>
-        <!-- <el-table-column prop="fileMenu" label="所属文件菜单" width="180">
-        </el-table-column> -->
-        <!-- <el-table-column prop="enable" label="系统模块" width="180">
+        <el-table-column prop="createDate" label="文件上传日期" width="180">
           <template slot-scope="scope">
-            <span v-if="scope.row.enable != 0">可用</span>
-            <span v-else>不可用</span>
+            <span>{{scope.row.createDate| moment("YYYY-MM-DD HH:mm:ss")}}</span>
           </template>
-        </el-table-column> -->
-        <el-table-column prop="module" label="系统模块" width="180">
+        </el-table-column>
+        <el-table-column prop="system" label="系统模块" width="180">
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="180">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="openDialog(scope)">上传</el-button>
-            <!-- <el-button size="mini" type="danger" @click="deleteData(scope.$index, scope.row)">删除</el-button> -->
+            <el-button size="mini" type="primary" @click="openDialog(scope)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="deleteData(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -76,84 +70,80 @@
       :total="1000"
       >
     </el-pagination>
-    <!-- <update-add-dailog :isShow='showDialog' :operation='operate' @toggleShow="changeState"></update-add-dailog> -->
+    <update-add-dailog v-bind="{isShow: showDialog, operation: operate, rowData: rowData}" @toggleShow="changeDialogState"></update-add-dailog>
   </section>
 </template>
 
 <script>
-// import UpdateAddDailog from "./update-add";
-import { queryData, addData } from "@/api/filesManage";
+import UpdateAddDailog from "./update-add";
+import { queryMenuData, addMenuData, delMenuData } from "@/api/menuManage";
 
 export default {
   data() {
     return {
       tableData: [{
-        menuName: 'select',
-        desc: '范德萨发三',
-        module: 'sys',
-        fileColumns: [{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+        name: 'select',
+        descript: '范德萨发三',
+        system: 'sys',
+        file: [{
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         },{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         },{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         },{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         }]
       },{
-        menuName: 'select',
-        desc: '范德萨发三',
-        module: 'sys',
-        fileColumns: [{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+        name: 'select',
+        descript: '范德萨发三',
+        system: 'sys',
+        file: [{
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         },{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         },{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         },{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         }]
       },{
-        menuName: 'select',
-        desc: '范德萨发三',
-        module: 'sys',
-        fileColumns: [{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+        name: 'select',
+        descript: '范德萨发三',
+        system: 'sys',
+        file: [{
+          name: 'etSelect',
+          descript: '下拉框组件',
+          enable: '0'
         },{
-          filename: 'etSelect',
+          name: 'etSelect',
           filedesc: '下拉框组件',
-          fileEnable: '0'
+          enable: '0'
         },{
-          filename: 'etSelect',
+          name: 'etSelect',
           filedesc: '下拉框组件',
-          fileEnable: '0'
-        },{
-          filename: 'etSelect',
-          filedesc: '下拉框组件',
-          fileEnable: '0'
+          enable: '0'
         }]
       }],
       tabParam: {},
       listQuery: {
-        filename: '',
+        name: '',
         // curPage: 1,
         // pageSize: 20,
         // importance: undefined,
@@ -180,12 +170,12 @@ export default {
       inputLoading: false,
       showDialog: false,
       operate: "", // 决定弹出窗口是添加也还是修改页的变量
-      radio8: "1"
+      rowData: null, //切换修改页时传过来的行数据
     };
   },
-  // components: {
-  //   UpdateAddDailog
-  // },
+  components: {
+    UpdateAddDailog
+  },
   methods: {
     selectGetData(query) {
       if (query !== "") {
@@ -205,6 +195,8 @@ export default {
         this.operate = "add";
       } else {
         this.operate = "update";
+        console.log('score', scope)
+        this.rowData = scope;
       }
       this.showDialog = true;
     },
@@ -220,16 +212,28 @@ export default {
       this.listQuery.curPage = val
       this.queryList()
     },
-    deleteData() {},
+    deleteData(index, data) {
+      this.tabLoading = true;
+      delMenuData(data._id, data)
+        .then(res => {
+          this.tableData.splice(index, 1);
+          this.tabLoading = false;
+        })
+        .catch(error => {
+          this.tabLoading = false;
+        });
+    },
     queryList() {  // 查询表格数据
       this.tabLoading = true;
-      queryData().then(response => {
-        this.tableData = response.data.data;
+      queryMenuData().then(response => {
+        this.tableData = response.data;
         // this.total = response.data.total;
+        this.tabLoading = false;
+      }).catch(error => {
         this.tabLoading = false;
       });
     },
-    changeState() {
+    changeDialogState() {
       this.showDialog = false;
     }
   }

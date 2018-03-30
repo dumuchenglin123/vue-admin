@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function queryData(query) {
+export function queryFileData(query) {
   return request({
     url: '/file',
     method: 'get',
@@ -8,7 +8,7 @@ export function queryData(query) {
   })
 }
 
-export function addData(data) {
+export function addFileData(data) {
   console.log(data,4555555)
   return request({
     url: '/file',
@@ -17,14 +17,14 @@ export function addData(data) {
   })
 }
 
-export function updateData(id, data) {
+export function updateFileData(id, data) {
   return request({
     url: `/file/${id}`,
     method: 'put',
     data
   })
 }
-export function DelData(id, data) {
+export function DelFileData(id, data) {
   return request({
     url: `/file/${id}`,
     method: 'delete',

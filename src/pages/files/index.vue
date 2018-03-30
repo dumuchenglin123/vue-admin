@@ -10,7 +10,7 @@
             <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
           </el-form-item>
           <el-form-item>
-            <el-upload class="upload-demo" ref="upload" :before-upload="beforeUpload" :on-progress="progress" :on-success="filesUpLoaded" :on-error="filesUnloaded" action="http://192.168.1.127:3000/manage/file/upload" :show-file-list='true' :auto-upload="true" :multiple='true'>
+            <el-upload class="upload-demo" ref="upload" :before-upload="beforeUpload" :on-progress="progress" :on-success="filesUpLoaded" :on-error="filesUnloaded" action="http://118.178.184.131:3000/manage/file/upload" :show-file-list='true' :auto-upload="true" :multiple='true'>
               <el-button slot="trigger" size="small" type="primary" :disabled="uploading">选取文件</el-button>
             </el-upload>
           </el-form-item>
@@ -52,13 +52,13 @@
     </div>
     <el-pagination class="L-pag" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
     </el-pagination>
-    <update-add-dailog v-bind="{isShow: showDialog, operation: operate, rowData: rowData}" @toggleShow="changeState"></update-add-dailog>
+    <update-add-dailog v-bind="{isShow: showDialog, operation: operate, rowData: rowData}" @toggleShow="changeDialogState"></update-add-dailog>
   </section>
 </template>
 
 <script>
 import UpdateAddDailog from "./update-add";
-import { queryData, updateData, DelData } from "@/api/filesManage";
+import { queryFileData, updateFileData, DelFileData } from "@/api/filesManage";
 
 export default {
   data() {
@@ -96,7 +96,6 @@ export default {
       showDialog: false,
       operate: "", // 决定弹出窗口是添加也还是修改页的变量
       rowData: null, //切换修改页时传过来的行数据
-      radio8: "1"
     };
   },
   components: {
@@ -109,7 +108,7 @@ export default {
       this.$delete(row, 'edit');
       const newData = { ...row };
 
-      updateData(newData._id, newData);
+      updateFileData(newData._id, newData);
 
     },
     editData(row) {
@@ -151,7 +150,7 @@ export default {
     },
     deleteData(index, data) {
       this.tabLoading = true;
-      DelData(data._id, data)
+      DelFileData(data._id, data)
         .then(res => {
           this.tableData.splice(index, 1);
           this.tabLoading = false;
@@ -163,7 +162,7 @@ export default {
     // 查询表格数据
     queryList() {
       this.tabLoading = true;
-      queryData(this.listQuery)
+      queryFileData(this.listQuery)
         .then(response => {
           this.tableData = response.data;
           this.tabLoading = false;
@@ -172,7 +171,7 @@ export default {
           this.tabLoading = false;
         });
     },
-    changeState() {
+    changeDialogState() {
       this.showDialog = false;
     },
     beforeUpload() {
@@ -182,9 +181,18 @@ export default {
     progress () {
       console.log(arguments, 'progress')
     },
-    filesUpLoaded(path) {
-      // this.$refs.upload.clearFiles();
-      const newData = path;
+    filesUpLoaded(res) {
+      let newData = [];
+      if (!res.data) {
+        this.$message({
+          message: res.message,
+          type: "error"
+        })
+        return false;
+      } else {
+        newData = res.data;
+      }
+
       console.log("uploaded success", arguments, this.$refs.upload);
       this.tableData.push(newData);
       // this.form.path = path;
