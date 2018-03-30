@@ -1,39 +1,16 @@
 <template>
   <section class="user-manage">
     <div class="L-selects">
-      <el-form label-width="85px" :inline="true" :model="listQuery">
+      <el-form label-width="85px" :inline="true" :model="listQuery" @submit.native.prevent>
         <el-row>
           <el-form-item label="文件名称：">
-            <el-input v-model="listQuery.filename" size="medium"></el-input>
-          </el-form-item>
-          <!-- </el-col> -->
-          <!-- <el-col :span="7"> -->
-          <!-- <el-form-item label="文件菜单：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item> -->
-          <!-- </el-col> -->
-          <!-- <el-col :span="7"> -->
-          <!-- <el-form-item label="文件模块：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item> -->
-          <!-- </el-col> -->
-          <!-- </el-row>
-        <el-row> -->
-          <!-- <el-col :span="5"> -->
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="small">查询</el-button>
+            <el-input v-model="listQuery.name" size="medium" @keyup.enter.native='queryList'></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-plus" size="small" @click="openDialog()">添加</el-button>
+            <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
           </el-form-item>
           <el-form-item>
-            <el-upload class="upload-demo" ref="upload" :before-upload="beforeUpload" :on-success="filesUpLoaded" :on-error="filesUnloaded" action="http://192.168.1.127:3000/manage/file/upload" :show-file-list='false' :auto-upload="true" :multiple='true'>
+            <el-upload class="upload-demo" ref="upload" :before-upload="beforeUpload" :on-progress="progress" :on-success="filesUpLoaded" :on-error="filesUnloaded" action="http://192.168.1.127:3000/manage/file/upload" :show-file-list='true' :auto-upload="true" :multiple='true'>
               <el-button slot="trigger" size="small" type="primary" :disabled="uploading">选取文件</el-button>
             </el-upload>
           </el-form-item>
@@ -54,12 +31,8 @@
             <span v-else>{{scope.row.descript}}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="fileMenu" label="所属文件菜单" width="180">
-        </el-table-column> -->
         <el-table-column prop="enable" label="是否可用" width="180" align="center">
           <template slot-scope="scope">
-            <!-- <span v-if="scope.row.enable != 0">可用</span>
-            <span v-else>不可用</span> -->
             <el-checkbox v-model="scope.row.enable" :true-label="1" :false-label="0" :disabled="!scope.row.edit"></el-checkbox>
           </template>
         </el-table-column>
@@ -70,14 +43,10 @@
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="180">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.edit" type="success" size="small" @click="rowEdit(scope.row)" icon="el-icon-circle-check-outline">Ok</el-button>
-            <el-button v-else type="primary" @click='scope.row.edit=!scope.row.edit; tabBtnDisabled=true' :disabled="tabBtnDisabled" size="small" icon="el-icon-edit">Edit</el-button>
-            <el-button size="mini" type="danger" @click="deleteData(scope.$index, scope.row)">删除</el-button>
+            <el-button v-if="scope.row.edit"  type="success" size="small" @click="confirmData(scope.row)" icon="el-icon-circle-check-outline">保存</el-button>
+            <el-button v-else type="primary" @click='editData(scope.row)' :disabled="tabBtnDisabled" size="small" icon="el-icon-edit">编辑</el-button>
+            <el-button size="small" icon="el-icon-delete" type="danger" @click="deleteData(scope.$index, scope.row)">删除</el-button>
           </template>
-          <!-- <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="openDialog(scope)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="deleteData(scope.$index, scope.row)">删除</el-button>
-          </template> -->
         </el-table-column>
       </el-table>
     </div>
@@ -96,35 +65,10 @@ export default {
     return {
       uploading: false,
       tabBtnDisabled: false,
-      tableData: [
-        {
-          name: "1111",
-          descript: "33333",
-          enable: 0,
-          edit: false
-        },
-        {
-          name: "1111",
-          descript: "33333",
-          enable: 1,
-          edit: false
-        },
-        {
-          name: "1111",
-          descript: "33333",
-          enable: 0,
-          edit: false
-        },
-        {
-          name: "1111",
-          descript: "33333",
-          enable: 1,
-          edit: false
-        }
-      ],
+      tableData: [],
       tabParam: {},
       listQuery: {
-        filename: ""
+        name: ""
         // curPage: 1,
         // pageSize: 20,
         // importance: undefined,
@@ -159,19 +103,18 @@ export default {
     UpdateAddDailog
   },
   methods: {
-    rowEdit(row) {
-      row.edit = false;
-      this.tabBtnDisabled = false;
+    confirmData(row) {
 
-      const newData = { ...this.form };
+      this.tabBtnDisabled = false;
+      this.$delete(row, 'edit');
+      const newData = { ...row };
 
       updateData(newData._id, newData);
 
-
-      // this.$message({
-      //   message: 'The title has been edited',
-      //   type: 'success'
-      // })
+    },
+    editData(row) {
+      this.$set(row, 'edit', true);
+      this.tabBtnDisabled = true;
     },
     selectGetData(query) {
       if (query !== "") {
@@ -203,7 +146,6 @@ export default {
     },
     // 分页器 设置当前第几页刷新
     handleCurrentChange(val) {
-      console.log(val, 322222);
       this.listQuery.curPage = val;
       this.queryList();
     },
@@ -218,10 +160,10 @@ export default {
           this.tabLoading = false;
         });
     },
+    // 查询表格数据
     queryList() {
-      // 查询表格数据
       this.tabLoading = true;
-      queryData()
+      queryData(this.listQuery)
         .then(response => {
           this.tableData = response.data;
           this.tabLoading = false;
@@ -234,15 +176,16 @@ export default {
       this.showDialog = false;
     },
     beforeUpload() {
+      console.log(arguments, 'beforwUpload')
       // this.
     },
+    progress () {
+      console.log(arguments, 'progress')
+    },
     filesUpLoaded(path) {
-      // console.log("uploaded success", this.$refs.upload);
-      this.$refs.upload.clearFiles();
-      const newData = {
-        path: "",
-        name: ""
-      };
+      // this.$refs.upload.clearFiles();
+      const newData = path;
+      console.log("uploaded success", arguments, this.$refs.upload);
       this.tableData.push(newData);
       // this.form.path = path;
     },
@@ -254,9 +197,5 @@ export default {
 </script>
 
 <style lang="scss">
-.user-manage {
-}
-.L-pag {
-  margin-top: 10px;
-}
+
 </style>

@@ -19,14 +19,14 @@ export function addData(data) {
 
 export function updateData(id, data) {
   return request({
-    url: `/sys/${id}`,
+    url: `/file/${id}`,
     method: 'put',
     data
   })
 }
 export function DelData(id, data) {
   return request({
-    url: `/sys/${id}`,
+    url: `/file/${id}`,
     method: 'delete',
     data
   })

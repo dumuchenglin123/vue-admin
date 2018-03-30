@@ -24,13 +24,12 @@
       <el-form-item label="文件描述：" :label-width="formLabelWidth" style="width: 350px;height: 68px" prop="descript">
         <el-input type="textarea" v-model="form.descript"  size="medium"></el-input>
       </el-form-item>
-      <el-form-item prop="path">
+      <!-- <el-form-item prop="path">
         <el-upload class="upload-demo" ref="upload"  :on-success="filesUpLoaded" :on-error="filesUnloaded" action="http://192.168.1.127:3000/manage/file/upload" :file-list="fileList" :show-file-list='true'  :auto-upload="true" :multiple='false'>
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogClosed">取 消</el-button>
@@ -68,10 +67,11 @@ export default {
           value: "JavaScript"
         }
       ],
+      // 验证规则
       rules: {
         name: { required: true, message: "请输入文件名称", trigger: "blur" },
         expireDate: { required: true, message: "请输入过期日期", trigger: "blur" },
-        path: {required: true, message: "请上传文件"},
+        // path: {required: true, message: "请上传文件"},
         descript: [
           { required: true, message: '请输入描述信息' },
           { min: 6, max: 30, message: '长度在 6 到 30 个字符' }

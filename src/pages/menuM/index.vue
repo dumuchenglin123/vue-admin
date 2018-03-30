@@ -3,30 +3,15 @@
     <div class="L-selects">
       <el-form label-width="85px" :inline="true" :model="listQuery">
         <el-row>
-          <!-- <el-col :span="7"> -->
             <el-form-item label="菜单名称：">
               <el-input v-model="listQuery.filename" size="medium"></el-input>
             </el-form-item>
-          <!-- </el-col> -->
-          <!-- <el-col :span="7"> -->
             <el-form-item label="所属模块：">
               <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
-          <!-- </el-col> -->
-          <!-- <el-col :span="7"> -->
-            <!-- <el-form-item label="文件模块：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item> -->
-          <!-- </el-col> -->
-        <!-- </el-row>
-        <el-row> -->
-          <!-- <el-col :span="5"> -->
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
             </el-form-item>

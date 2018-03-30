@@ -34,10 +34,6 @@ NProgress.configure({
 Vue.use(Router)
 
 const routes = [{
-  path: '/404',
-  name: 'notPage',
-  component: noPageComponent
-}, {
   path: '/login',
   name: 'login',
   component: loginComponent,
@@ -117,8 +113,11 @@ const routes = [{
       title: '系统管理'
     }
   }]
-
-}]
+  }, {
+    path: '*',
+    name: 'notPage',
+    component: noPageComponent
+  },]
 
 const router = new Router({
   routes,
