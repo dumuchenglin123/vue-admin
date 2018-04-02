@@ -3,14 +3,8 @@
     <div class="L-selects">
       <el-form label-width="85px" :inline="true" :model="listQuery">
         <el-row>
-            <el-form-item label="菜单名称：">
+            <el-form-item label="角色名称：">
               <el-input v-model="listQuery.name" size="medium"></el-input>
-            </el-form-item>
-            <el-form-item label="所属模块：">
-              <el-select v-model="typeValue" filterable default-first-option remote placeholder="请输入关键词" :remote-method="selectGetData" :loading="inputLoading" size="medium">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.text" :value="item.value">
-                </el-option>
-              </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" size="small" @click="queryList">查询</el-button>
@@ -23,33 +17,32 @@
     </div>
     <div class="L-grid">
       <el-table :data="tableData" stripe border height='100%' v-loading="tabLoading" :header-cell-style="{textAlign: 'center'}">
+        <el-table-column type="index" width="50">
+        </el-table-column>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-table :data="props.row.file" stripe border :header-cell-style="{textAlign: 'center'}">
-              <el-table-column prop="name" label="文件名称" width="140">
+            <el-table :data="props.row.menus" stripe border :header-cell-style="{textAlign: 'center'}">
+              <el-table-column prop="name" label="菜单名称" width="140">
               </el-table-column>
-              <el-table-column prop="descript" label="文件描述" width="120">
+              <el-table-column prop="descript" label="菜单描述" width="120">
               </el-table-column>
-              <el-table-column prop="createDate" label="文件上传日期" width="180">
-                <template slot-scope="scope">
-                  <span>{{scope.row.createDate| moment("YYYY-MM-DD HH:mm:ss")}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="enable" label="是否可用" >
+              <el-table-column prop="system.descript" label="菜单所属系统">
               </el-table-column>
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="菜单名称" width="180">
+        <el-table-column prop="name" label="角色名称" width="180">
         </el-table-column>
-        <el-table-column prop="descript" label="菜单描述" width="180">
+        <el-table-column prop="descript" label="角色描述" width="180">
         </el-table-column>
-        <el-table-column prop="createDate" label="菜单创建日期" width="180">
+        <el-table-column prop="createDate" label="角色创建日期" width="180">
           <template slot-scope="scope">
             <span>{{scope.row.createDate| moment("YYYY-MM-DD HH:mm:ss")}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="system" label="系统模块" width="180">
+        <!-- <el-table-column prop="system" label="相关管理菜单" width="180">
+        </el-table-column> -->
+        <el-table-column prop="system.descript" label="相关管理系统" width="180">
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="180">
           <template slot-scope="scope">
@@ -76,9 +69,10 @@
 
 <script>
 import UpdateAddDailog from "./update-add";
-import { queryMenuData, addMenuData, delMenuData } from "@/api/menuManage";
+import { queryRoleData,  delRoleData } from "@/api/rolesManage";
 
 export default {
+  name: 'role',
   data() {
     return {
       tableData: [{
@@ -214,7 +208,7 @@ export default {
     },
     deleteData(index, data) {
       this.tabLoading = true;
-      delMenuData(data._id, data)
+      delRoleData(data._id, data)
         .then(res => {
           this.tableData.splice(index, 1);
           this.tabLoading = false;
@@ -225,7 +219,7 @@ export default {
     },
     queryList() {  // 查询表格数据
       this.tabLoading = true;
-      queryMenuData().then(response => {
+      queryRoleData().then(response => {
         this.tableData = response.data;
         // this.total = response.data.total;
         this.tabLoading = false;

@@ -59,7 +59,7 @@ export default {
         file: {required: true, message: "请选择对应菜单文件", trigger: "blur"},
         descript: [
           { message: "请输入描述信息" },
-          { min: 6, max: 30, message: "长度在 6 到 30 个字符" }
+          { min: 2, max: 30, message: "长度在 2 到 30 个字符" }
         ]
       },
     };

@@ -13,8 +13,11 @@ import userComponent from 'pages/users'
 
 import authorComponent from 'pages/authority'
 
+import roleComponent from 'pages/authority/roles'
+
 import peopleMangeComponent from 'pages/peoples'
 
+console.log(roleComponent,222)
 import filesManageComponent from 'pages/files'
 
 import menuManageComponent from 'pages/menuM'
@@ -60,12 +63,17 @@ const routes = [{
   }, {
     path: 'authority',
     name: 'authority',
+    redirect: '/authority/role',
     component: authorComponent,
     meta: {
       title: '权限管理'
     },
     children: [{
-      path: 'test1'
+      path: 'role',
+      component: roleComponent,
+      meta: {
+        title: '角色管理'
+      }
     }, {
       path: 'test2',
       meta: {
