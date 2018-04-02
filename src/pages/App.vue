@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <left-slide v-show="sideBarShow" />
+    <left-slide  />
     <div class="right-container" :class="{ 'hideSidebar': !sideBarShow }">
       <navbar></navbar>
       <tabs-view></tabs-view>

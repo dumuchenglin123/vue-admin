@@ -8,6 +8,14 @@ export function queryMenuData(query) {
   })
 }
 
+export function queryMenuBySys(id) {
+  console.log('id',id)
+  return request({
+    url: `/system_menu/${id}`,
+    method: 'get'
+  })
+}
+
 export function addMenuData(data) {
   console.log(data, 4555555)
   return request({

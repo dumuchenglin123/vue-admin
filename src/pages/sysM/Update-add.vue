@@ -31,7 +31,7 @@ export default {
         name: { required: true, message: "请输入文件名称", trigger: "blur" },
         descript: [
           { required: true, message: "请输入描述信息",trigger: "blur" },
-          { min: 6, max: 30, message: "长度在 6 到 30 个字符" }
+          { min: 2, max: 30, message: "长度在 2 到 30 个字符" }
         ]
       }
     };

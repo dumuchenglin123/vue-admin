@@ -1,5 +1,7 @@
 <template>
-  <h1>权限管理</h1>
+  <section>
+    <router-view class="content"></router-view>
+  </section>
 </template>
 
 <script>
